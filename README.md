@@ -1,2 +1,2 @@
 # clique
-Scrapper to get information for Kattis problems solved
+A scraper to retrieve solved Kattis problem data for grading assistance
