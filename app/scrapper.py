@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 
 def scrape_kattis_submissions(url):
-
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -13,6 +12,7 @@ def scrape_kattis_submissions(url):
         return None
     
 def process_solve_period(soup: BeautifulSoup, filename):
+    '''returns a dict mapping each student to (number of problems solved, which problems they solved)'''
 
     student_info = {}
 
@@ -48,9 +48,9 @@ def process_solve_period(soup: BeautifulSoup, filename):
         if name and name in student_info:
             student_info[name] = (num_solved, problems_solved)
 
-
-    for name in student_info:
-        print(f'{name}: {student_info[name]}')
+    
+    return student_info
+    
     
 
 
