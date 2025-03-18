@@ -25,10 +25,10 @@ def main():
     print("Enter file containing student names to process: ", end = "")
     filename = input()
 
-    print("Enter assignment period (upsolve/solve): ", end = "")
-    type = input()
+    print("Is assignment being processed for the solve period? (yes/no) ", end = "")
+    is_upsolve = input()
 
-    if (type.lower() != "solve"):
+    if ("yes" not in is_upsolve.lower()):
         print("Enter code for corresponding solve period: ", end = "")
         solve_code = input()
 
