@@ -14,12 +14,12 @@ def fetch_results(code, filename, is_problem_set, solve):
         raise ValueError(f"HTML content could not be obtained.\n\nCode provided is {code}\nURL scraped is {URL}")
     
     if (is_problem_set):
-        results = process_problem_set(soup, filename)
+        results = process_submissions(soup, filename, 0, 1, 2)
     else:
         if (solve):
-            results = process_lab(soup, filename)
+            results = process_submissions(soup, filename, 1, 2, 4)
         else:
-            results = process_problem_set(soup, filename)
+            results = process_submissions(soup, filename, 0, 1, 2)
 
     return results
 
