@@ -1,15 +1,34 @@
 import requests
 from bs4 import BeautifulSoup
 
-def scrape_kattis_submissions(url):
+# root url to scrape; change to fit semester in which course is taught
+BASE_URL = "https://tamu.kattis.com/courses/CSCE430/2025Spring/assignments"
+
+def scrape_kattis_submissions(code):
     try:
+        url = f'{BASE_URL}/{code}/standings'
         response = requests.get(url)
         response.raise_for_status()
         soup = BeautifulSoup(response.content, 'html.parser')
-        return soup
+
+        name = soup.find("h1").text.split("-")[1].strip()
+        components = [el.lower() for el in name.split()]
+        is_solve = is_problem_set = True
+
+        if "upsolve" in components:
+            is_solve = False 
+
+        if "lab" in components:
+            is_problem_set = False 
+
+        out_filename = "_".join(components)
+
+        return (soup, is_solve, is_problem_set, out_filename)
+
     except requests.RequestException as e:
         print(f"Request failed: {e}")
         return None
+    
     
 def process_submissions(soup: BeautifulSoup, filename, name_col, num_solved_col, problem_start_col, honors_problem = None):
     '''

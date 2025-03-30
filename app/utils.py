@@ -11,6 +11,6 @@ def parse_results(results: dict):
         # else:
         #     problems = None
 
-        dat.append({"Name": student, "Number": num_solved})
+        dat.append({"Name": student, "Number Solved": num_solved})
         
     return dat
