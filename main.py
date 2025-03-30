@@ -2,7 +2,7 @@ from app import *
 import pandas as pd
 
 
-def fetch_results(soup, filename, is_problem_set, solve, code = None):
+def fetch_results(soup, students, is_problem_set, solve, code = None):
 
     if not soup:
         inf = scrape_kattis_submissions(code)
@@ -14,11 +14,10 @@ def fetch_results(soup, filename, is_problem_set, solve, code = None):
     
     # If problem set or upsolve period, format of table remains same
     if (is_problem_set or not solve):
-        results = process_submissions(soup, filename, 0, 1, 2)
+        results = process_submissions(soup, students, 0, 1, 2)
     else:
-        results = process_submissions(soup, filename, 1, 2, 4)
+        results = process_submissions(soup, students, 1, 2, 4)
         
-
     return results
 
 
@@ -34,17 +33,21 @@ def main():
         raise ValueError(f"HTML content could not be obtained.\n\nCode provided is {code}\n")
 
     
-    # print("Enter file containing student names to process: ", end = "")
-    # filename = input()
-    filename = "data/roster/spring_25.txt"
+    print("Enter file containing student names to process: ", end = "")
+    filename = input()
+    
+    roster = {}
+    with open(filename, 'r') as f:
+        for row in f.readlines():
+            roster[row.strip()] = (0, [])
 
     # Processing Upsolve Period
     if (not is_solve):
         print("Enter code for corresponding SOLVE period: ", end = "")
         solve_code = input()
-        solve_results = fetch_results(None, filename, is_problem_set, True, code = solve_code)
+        solve_results = fetch_results(None, roster, is_problem_set, True, code = solve_code)
 
-        upsolve_raw = fetch_results(soup, filename, is_problem_set, False)
+        upsolve_raw = fetch_results(soup, roster, is_problem_set, False)
         results = {}
 
         for student in solve_results:
@@ -59,7 +62,7 @@ def main():
             
             results[student] = (len(upsolved), list(upsolved))
     else:
-        results = fetch_results(soup, filename, is_problem_set, is_solve)
+        results = fetch_results(soup, roster, is_problem_set, is_solve)
 
 
     # convert results to csv
