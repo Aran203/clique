@@ -3,7 +3,10 @@ def parse_results(results: dict):
     dat = []
 
     for student, info in results.items():
-        num_solved = info[0]
+        if info:
+            num_solved = info[0]
+        else:
+            num_solved = 0
         # problems = info[1]
 
         # if problems:

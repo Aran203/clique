@@ -51,13 +51,15 @@ def process_submissions(soup: BeautifulSoup, filename, name_col, num_solved_col,
 
     for row in rows:
         counter = 0
-        name = num_solved = None
-        problems_solved = []
+        num_solved = None
+        name = problems_solved = []
 
         for td in row.find_all("td"):
             # counter can be thought of similar to 0-indexed column number
             if counter == name_col:
-                name = td.text.strip()
+                names = td.text.strip()
+                name = [i.strip() for i in names.split(',')]
+
             elif counter == num_solved_col:
                 num_solved = int(td.text.strip())
             elif counter >= problem_start_col:
@@ -67,9 +69,10 @@ def process_submissions(soup: BeautifulSoup, filename, name_col, num_solved_col,
                     problems_solved.append(chr(counter + 65 - problem_start_col))
             counter += 1
     
-
-        if name and name in student_info:
-            student_info[name] = (num_solved, problems_solved)
+        
+        for el in name:
+            if el in student_info:
+                student_info[el] = (num_solved, problems_solved)
 
     return student_info
 
