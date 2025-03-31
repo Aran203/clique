@@ -3,6 +3,24 @@ from bs4 import BeautifulSoup
 
 # root url to scrape; change to fit semester in which course is taught
 BASE_URL = "https://tamu.kattis.com/courses/CSCE430/2025Spring/assignments"
+LOGIN_URL = "https://tamu.kattis.com/login"
+
+def kattis_log_in():
+    session = requests.Session()
+    resp = session.get(LOGIN_URL)
+    soup = BeautifulSoup(resp.text, 'html.parser')
+    csrf_token = soup.find("input", {"name": "csrf_token"})["value"]
+
+    payload = {
+        "user": "USERNAME",
+        "password": "PASSWORD",
+        "csrf_token": csrf_token
+    }
+
+    response = session.post(LOGIN_URL, data = payload)
+    print(response.url)
+    
+    return session
 
 def scrape_kattis_submissions(code):
     try:

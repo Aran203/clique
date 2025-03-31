@@ -23,6 +23,8 @@ def fetch_results(soup, students, is_problem_set, solve, code = None):
 
 def main():
 
+    session = kattis_log_in()
+        
     print("Enter assignment code: ", end = "")
     code = input()
 
@@ -70,6 +72,8 @@ def main():
     data.to_csv(f'{OUT_FILENAME}.csv', index = False)
 
     print(f"\nProcessing complete\n")
+
+    session.close()
     
 
 
